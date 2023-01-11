@@ -1,0 +1,23 @@
+//
+//  Fibonaci-Prefix.pch
+//  Fibonaci
+//
+//  Created by Le Xuan Quynh on 11/01/2023.
+//
+
+#ifndef Fibonaci_Prefix_h
+#define Fibonaci_Prefix_h
+
+#ifdef __cplusplus
+//#import <opencv2/opencv.hpp>
+//#import <opencv2/imgcodecs/ios.h>
+//#import <opencv2/videoio/cap_ios.h>
+//#import "OpenCVWrapper.h"
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+
+#endif /* Fibonaci_Prefix_h */
