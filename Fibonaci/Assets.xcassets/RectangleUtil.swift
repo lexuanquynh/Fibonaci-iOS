@@ -109,5 +109,38 @@ class RectangleUtil {
         return view
     }
 
+    // crop uiimage by center point and size
+    static func cropImage(_ image: UIImage, _ center: CGPoint, _ size: CGFloat) -> UIImage? {
+        let scale = max(image.size.width / size, image.size.height / size)
+        let cropSize = CGSize(width: size * scale, height: size * scale)
+        let origin = CGPoint(x: (center.x * scale) - (cropSize.width / 2), y: (center.y * scale) - (cropSize.height / 2))
+        let rect = CGRect(origin: origin, size: cropSize)
+        let imageRef = image.cgImage!.cropping(to: rect)
+        // check imageRef nil
+        if imageRef == nil {
+            return nil
+        }
+        let cropped = UIImage(cgImage: imageRef!, scale: 0, orientation: image.imageOrientation)
+        return cropped
+    }
+
+    // crop uiimage by frame
+    static func cropImage(_ image: UIImage, _ frame: CGRect) -> UIImage? {
+        // check frame is valid
+        if frame.origin.x < 0 || frame.origin.y < 0 || frame.size.width <= 0 || frame.size.height <= 0 {
+            return nil
+        }
+        let scale = max(image.size.width / frame.width, image.size.height / frame.height)
+        let cropSize = CGSize(width: frame.width * scale, height: frame.height * scale)
+        let origin = CGPoint(x: (frame.origin.x * scale), y: (frame.origin.y * scale))
+        let rect = CGRect(origin: origin, size: cropSize)
+        let imageRef = image.cgImage!.cropping(to: rect)
+        // check imageRef nil
+        if imageRef == nil {
+            return nil
+        }
+        let cropped = UIImage(cgImage: imageRef!, scale: scale, orientation: image.imageOrientation)
+        return cropped
+    }
    
 }

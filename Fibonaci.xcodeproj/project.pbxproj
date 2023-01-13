@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C6770219296FA655009BE560 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6770218296FA655009BE560 /* Camera.swift */; };
+		C677021B296FA66E009BE560 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C677021A296FA66E009BE560 /* Preview.swift */; };
+		C677021D296FA681009BE560 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C677021C296FA681009BE560 /* CameraViewController.swift */; };
 		C6D0BBBC296BA44C0027D099 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D0BBBB296BA44C0027D099 /* AppDelegate.swift */; };
 		C6D0BBBE296BA44C0027D099 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D0BBBD296BA44C0027D099 /* SceneDelegate.swift */; };
 		C6D0BBC0296BA44C0027D099 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D0BBBF296BA44C0027D099 /* ViewController.swift */; };
@@ -32,6 +35,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C6770218296FA655009BE560 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		C677021A296FA66E009BE560 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		C677021C296FA681009BE560 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		C6D0BBB8296BA44C0027D099 /* Fibonaci.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fibonaci.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6D0BBBB296BA44C0027D099 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C6D0BBBD296BA44C0027D099 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +88,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C6770217296FA64B009BE560 /* Solutions */ = {
+			isa = PBXGroup;
+			children = (
+				C6770218296FA655009BE560 /* Camera.swift */,
+				C677021A296FA66E009BE560 /* Preview.swift */,
+				C677021C296FA681009BE560 /* CameraViewController.swift */,
+			);
+			path = Solutions;
+			sourceTree = "<group>";
+		};
 		C6D0BBAF296BA44C0027D099 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +118,7 @@
 		C6D0BBBA296BA44C0027D099 /* Fibonaci */ = {
 			isa = PBXGroup;
 			children = (
+				C6770217296FA64B009BE560 /* Solutions */,
 				C6D0BBBB296BA44C0027D099 /* AppDelegate.swift */,
 				C6D0BBBD296BA44C0027D099 /* SceneDelegate.swift */,
 				C6D0BBBF296BA44C0027D099 /* ViewController.swift */,
@@ -212,15 +229,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6770219296FA655009BE560 /* Camera.swift in Sources */,
 				C6D0BBC0296BA44C0027D099 /* ViewController.swift in Sources */,
 				C6D0BBBC296BA44C0027D099 /* AppDelegate.swift in Sources */,
 				C6D0BBBE296BA44C0027D099 /* SceneDelegate.swift in Sources */,
+				C677021D296FA681009BE560 /* CameraViewController.swift in Sources */,
 				F8D3837865034348CE5EC68F /* Solution.swift in Sources */,
 				F8D38D6E3BD8B8F82ACE9423 /* RectangleUtil.swift in Sources */,
 				C6D0BBDD296E52630027D099 /* OpenCVWrapper.mm in Sources */,
 				C6D0BBD0296BAB1E0027D099 /* QRCodeViewController.swift in Sources */,
 				C6D0BBE0296E5D390027D099 /* DetectViewController.swift in Sources */,
 				C6D0BBD2296D0DC90027D099 /* CaptureManager.swift in Sources */,
+				C677021B296FA66E009BE560 /* Preview.swift in Sources */,
 				F8D381A274F9E699EB355257 /* QRCodeUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,11 +397,12 @@
 				GCC_PREFIX_HEADER = "Fibonaci/Fibonaci-Prefix.pch";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Fibonaci/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera to scan QRCode";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Our application needs permission to write photos...";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -413,11 +434,12 @@
 				GCC_PREFIX_HEADER = "Fibonaci/Fibonaci-Prefix.pch";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Fibonaci/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera to scan QRCode";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Our application needs permission to write photos...";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

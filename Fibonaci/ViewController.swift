@@ -162,9 +162,13 @@ class ViewController: UIViewController {
 //        let frame = RectangleUtil.getFrame(center, size)
         let yellowView = RectangleUtil.getView(center, 0, size)
         
-        print(" size = \(size)")
+        
         // crop the image in the center of imageView
-        guard let cropImage = RectangleUtil.cropImage(imageView, frame: yellowView.frame) else {
+        let rectToCrop = yellowView.frame
+        let factor = imageView.frame.width/rectToCrop.size.width
+        let rect = CGRect(x: rectToCrop.origin.x / factor, y: rectToCrop.origin.y / factor, width: rectToCrop.width / factor, height: rectToCrop.height / factor)
+        
+        guard let cropImage = RectangleUtil.cropImage(imageView, frame: rect) else {
             return
         }
       
