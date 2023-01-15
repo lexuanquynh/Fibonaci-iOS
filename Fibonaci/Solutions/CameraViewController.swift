@@ -130,8 +130,8 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         DispatchQueue.main.async { [weak self] in
-            guard let strongSelf = self else { return }
-            let bounds = strongSelf.preview.bounds
+            guard let self = self else { return }
+            let bounds = self.preview.bounds
             let uiLowerLeft = bounds.origin
             let uiLowerRight = CGPoint(
                 x: bounds.width,
@@ -142,9 +142,9 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 y: bounds.height
             )
             // supports only portrait mode
-            let videoLowerLeft = strongSelf.preview.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: uiLowerRight)
-            let videoUpperLeft = strongSelf.preview.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: uiLowerLeft)
-            let videoLowerRight = strongSelf.preview.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: uiUpperRight)
+            let videoLowerLeft = self.preview.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: uiLowerRight)
+            let videoUpperLeft = self.preview.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: uiLowerLeft)
+            let videoLowerRight = self.preview.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: uiUpperRight)
             let uiOrigin = CGPoint(x: videoLowerLeft.y, y: videoLowerLeft.x)
             let uiSize = CGSize(
                 width: videoUpperLeft.y - videoLowerLeft.y,
@@ -158,20 +158,20 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             )
             let context = CIContext()
             if let bitmap = context.createCGImage(ciImage, from: uiCroppingRect) {
-                if strongSelf.qrcodeIsDetect {
-                    if strongSelf.qrCodeFrameView.frame.width == 0 {
+                if self.qrcodeIsDetect {
+                    if self.qrCodeFrameView.frame.width == 0 {
                         return
                     }
                     let image = UIImage(cgImage: bitmap)
-                    let rectToCrop = strongSelf.qrCodeFrameView.frame
+                    let rectToCrop = self.qrCodeFrameView.frame
                     let croppedImage: UIImage?
-                    let factor = image.size.width / strongSelf.qrCodeFrameView.frame.width
+                    let factor = image.size.width / self.qrCodeFrameView.frame.width
                     let rect = CGRect(x: rectToCrop.origin.x / factor, y: rectToCrop.origin.y / factor, width: rectToCrop.width / factor, height: rectToCrop.height / factor)
-                    croppedImage = strongSelf.cropImage1(image: image, rect: rect)
+                    croppedImage = self.cropImage1(image: image, rect: rect)
 //                    let scale = self.cropImageView.frame.width/image.size.width
 //                    croppedImage = self.cropImage2(image: image, rect: rectToCrop, scale: scale)
                     
-                    strongSelf.cropImageView.image = croppedImage
+                    self.cropImageView.image = croppedImage
 //                    strongSelf.cropImageView.frame = strongSelf.qrCodeFrameView.frame
 //                    strongSelf.cropImageView.frame = CGRect(x: 10, y: 10, width: strongSelf.qrCodeFrameView.frame.width * 2, height: strongSelf.qrCodeFrameView.frame.height * 2)
                     

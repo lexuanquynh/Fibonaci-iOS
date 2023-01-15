@@ -28,6 +28,7 @@ class ViewController: UIViewController {
 
     private lazy var cropImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.alpha = 0.5
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -64,6 +65,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
         // Get the back-facing camera for capturing videos
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera], mediaType: AVMediaType.video, position: .back)
@@ -114,43 +116,19 @@ class ViewController: UIViewController {
             return
         }
     }
-
-    @objc private func handleTakePhoto() {
-        let photoSettings = AVCapturePhotoSettings()
-        if let photoPreviewType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
-            photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoPreviewType]
-//            photoOutput.capturePhoto(with: photoSettings, delegate: self)
-            // stop the session
-//            captureSession.stopRunning()
-           
-        }
-    }
-
-    private func handleGetImageInScreen() {
-        // get center of qrCodeFrameView frame
-//        let center = CGPoint(x: qrCodeFrameView.frame.midX, y: qrCodeFrameView.frame.midY)
-//        if let image = captureView.image {
-//            let cropImage = RectangleUtil.cropImage(image, center, 0.5, 100)
-//            let imageView = UIImageView(image: cropImage)
-//            imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-//            view.addSubview(imageView)
-//        }
-//        let yellowView = RectangleUtil.getView(center, 0.5, 100)
-//        yellowView.backgroundColor = .yellow
-//        view.addSubview(yellowView)
-//        captureView.isHidden = true
-    }
     
     private var yellowView: UIView!
     
-    private func drawRectangle(center: CGPoint, size: CGFloat, inView: UIImageView) {
+    private func drawRectangle() {
+        let center = CGPoint(x: qrCodeFrameView.frame.midX, y: qrCodeFrameView.frame.midY)
+        let size = qrCodeFrameView.frame.width * 2
         let tempView = RectangleUtil.getView(center, 0, size)
         
         if yellowView == nil {
             yellowView = tempView
             yellowView.backgroundColor = .yellow
             
-            inView.addSubview(yellowView)
+            self.captureView.addSubview(yellowView)
         } else {
             yellowView.frame = tempView.frame
         }
@@ -158,17 +136,21 @@ class ViewController: UIViewController {
         
     }
 
-    private  func cropImageRectangle(center: CGPoint, size: CGFloat, imageView: UIImageView)  {
-//        let frame = RectangleUtil.getFrame(center, size)
+    private  func cropImageRectangle()  {
+        let center = CGPoint(x: qrCodeFrameView.frame.midX, y: qrCodeFrameView.frame.midY)
+        let size = qrCodeFrameView.frame.width * 2
         let yellowView = RectangleUtil.getView(center, 0, size)
-        
         
         // crop the image in the center of imageView
         let rectToCrop = yellowView.frame
-        let factor = imageView.frame.width/rectToCrop.size.width
+        let factor = self.captureView.frame.width/rectToCrop.size.width
         let rect = CGRect(x: rectToCrop.origin.x / factor, y: rectToCrop.origin.y / factor, width: rectToCrop.width / factor, height: rectToCrop.height / factor)
         
-        guard let cropImage = RectangleUtil.cropImage(imageView, frame: rect) else {
+//        guard let cropImage = RectangleUtil.cropImage(self.captureView, frame: rect) else {
+//            return
+//        }
+        guard let targetImage = self.captureView.image,
+              let cropImage = self.cropImage1(image: targetImage, rect: rect) else {
             return
         }
       
@@ -176,10 +158,20 @@ class ViewController: UIViewController {
         self.cropImageView.image = cropImage
         self.cropImageView.frame = yellowView.frame
         // check if cropImageView is already added
-        if !imageView.contains(self.cropImageView) {
-            imageView.addSubview(self.cropImageView)
+        if !self.captureView.contains(self.cropImageView) {
+            self.captureView.addSubview(self.cropImageView)
         }
     }
+    
+    func cropImage1(image: UIImage, rect: CGRect) -> UIImage? {
+        let cgImage = image.cgImage!
+        let croppedCGImage = cgImage.cropping(to: rect)
+        if croppedCGImage == nil {
+            return nil
+        }
+        return UIImage(cgImage: croppedCGImage!, scale: image.scale, orientation: image.imageOrientation)
+    }
+    
 }
 
 
@@ -200,12 +192,6 @@ extension ViewController: AVCaptureMetadataOutputObjectsDelegate {
             let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
             qrCodeFrameView.frame = barCodeObject!.bounds
             qrcodeIsDetect = true
-
-//            if metadataObj.stringValue != nil {
-//                print(metadataObj.stringValue!)
-//            }
-            
-//            handleTakePhoto()
         }
     }
 }
@@ -228,22 +214,12 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
         
         // stop the session
         captureSession.stopRunning()
-        
-        handleGetImageInScreen()
     }
 }
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        if qrcodeIsDetect {
-//            captureSession.stopRunning()
-            let center = CGPoint(x: qrCodeFrameView.frame.midX, y: qrCodeFrameView.frame.midY)
-            self.drawRectangle(center: center, size: qrCodeFrameView.frame.width * 2, inView: self.captureView)
-            self.cropImageRectangle(center: center, size: qrCodeFrameView.frame.width * 2, imageView: self.captureView)
-
-
-//            return
-        }
+        
         
         guard let outputImage = getImageFromSampleBuffer(sampleBuffer: sampleBuffer) else {
             return
@@ -255,6 +231,15 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             captureView.frame = videoPreviewLayer!.frame
             self.videoPreviewLayer!.frame = captureView.layer.bounds
             view.bringSubviewToFront(captureView)
+        }
+        
+        if qrcodeIsDetect {
+//            captureSession.stopRunning()
+            self.drawRectangle()
+            self.cropImageRectangle()
+
+
+//            return
         }
     }
 }

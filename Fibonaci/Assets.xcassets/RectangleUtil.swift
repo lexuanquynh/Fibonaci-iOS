@@ -56,19 +56,21 @@ class RectangleUtil {
             return nil
         }
 
-        let image = imageView.image
+        guard let image = imageView.image else {
+            return nil
+        }
         let imageViewSize = imageView.frame.size
-        let scale = max(image!.size.width / imageViewSize.width, image!.size.height / imageViewSize.height)
-        let widthScale = image!.size.width / imageViewSize.width
-        let heightScale = image!.size.height / imageViewSize.height
+        let scale = max(image.size.width / imageViewSize.width, image.size.height / imageViewSize.height)
+        let widthScale = image.size.width / imageViewSize.width
+        let heightScale = image.size.height / imageViewSize.height
         let cropSize = CGSize(width: frame.width * scale, height: frame.height * scale)
         let origin = CGPoint(x: (frame.origin.x * widthScale), y: (frame.origin.y * heightScale))
         let rect = CGRect(origin: origin, size: cropSize)
-        let imageRef = image!.cgImage!.cropping(to: rect)
+        let imageRef = image.cgImage!.cropping(to: rect)
         if imageRef == nil {
             return nil
         }
-        let cropped = UIImage(cgImage: imageRef!, scale: scale, orientation: image!.imageOrientation)
+        let cropped = UIImage(cgImage: imageRef!, scale: scale, orientation: image.imageOrientation)
         return cropped
     }
 
